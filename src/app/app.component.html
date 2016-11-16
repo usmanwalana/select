@@ -1,4 +1,4 @@
-Select 2: <select2 [value]="startValue" (valueChanged)="changed($event)" [data]="test" [width]="200" [theme]="'classic'"></select2>
+Select 2: <select2 [value]="startValue" (valueChanged)="changed($event)" [data]="test | async" [width]="200" [theme]="'classic'"></select2>
 <br/><br/>
 <div *ngIf="selected">
     Selected value in select 2: <b>{{selected}}</b>

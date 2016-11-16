@@ -1,6 +1,13 @@
 import { Component , OnInit} from '@angular/core';
 import {Select2TemplateFunction , Select2OptionData} from 'ng2-select2/ng2-select2';
 import {Http} from '@angular/http';
+
+import { Observable }     from 'rxjs/Observable';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/switchMap';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -11,32 +18,20 @@ export class AppComponent implements OnInit
     private startValue:string = 'car3';
     private selected:string = "";
     my : any[];
-    test: Select2OptionData[] = [];
+    test: Observable<Select2OptionData[]>;
     constructor(private http : Http)
     {
     }
 
-    getUsers()
-    {
-        return this.http.get("https://jsonplaceholder.typicode.com/users");
-    }
     ngOnInit()
     {
-        this.getUsers().subscribe(
-            success => {
-                this.my = success.json();
-                this.populateUsers();
-            }
-        )
-    }
-    populateUsers()
-    {
-        for(let user of this.my)
-        {
-            this.test.push({id : user.id , text : user.name});
-
-        }
-        console.log(this.test);
+        this.test = this.http.get("https://jsonplaceholder.typicode.com/users")
+            .map(success => success.json())
+            .map((users) => {
+                return users.map((user) => {
+                    return {id : user.id , text : user.name};
+                });
+            })
     }
 
 
